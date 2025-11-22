@@ -5,16 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rodrigues Açaí & Cia</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'acai-roxo': '#5A189A',
+                    'acai-claro': '#7B2CBF',
+                    'acai-verde': '#80FF72',
+                    'acai-bg': '#140F1F',
+                },
+                keyframes: {
+                    fadeInUp: {
+                        '0%': { opacity: '0', transform: 'translateY(20px)' },
+                        '100%': { opacity: '1', transform: 'translateY(0)' },
+                    },
+                    scaleIn: {
+                        '0%': { opacity: '0', transform: 'scale(0.9)' },
+                        '100%': { opacity: '1', transform: 'scale(1)' },
+                    }
+                },
+                animation: {
+                    fadeInUp: 'fadeInUp 0.5s ease-out',
+                    scaleIn: 'scaleIn 0.3s ease-out'
+                }
+            },
+        }
+    }
+  </script>
+  
   <style>
     body { font-family: sans-serif; }
     .carousel-item { display: none; transition: opacity 1s ease-in-out; }
     .carousel-item.active { display: block; opacity: 1; }
     .carousel-item.fade-out { opacity: 0; }
+    
+    /* Estilos do Modal */
+    .main-container { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); }
+    .toggle-btn { transition: all 0.3s ease; cursor: pointer; padding: 0.5rem 1rem; border-radius: 9999px; }
+    .toggle-btn.active { background-color: #80FF72; color: #140F1F; font-weight: 600; }
+    .modal-content-mobile { max-height: 90vh; overflow-y: auto; }
   </style>
 </head>
 <body class="bg-purple-900 text-white">
 
-  <!-- Navbar -->
   <header class="fixed w-full bg-white/20 backdrop-blur-md z-50 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center relative">
       <div class="flex items-center gap-3 relative -top-2">
@@ -31,7 +66,8 @@
         <a href="cardapio.html" class="menu-link" data-login="true">Cardápio</a>
         <a href="promocoes.html" class="menu-link" data-login="true">Promoções</a>
         <a href="#contato" class="menu-link" data-login="false">Contato</a>
-        <a href="login.html" class="px-4 py-2 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Login</a>
+        
+        <button id="open-modal-btn" class="px-4 py-2 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Login</button>
       </nav>
       <div class="md:hidden">
         <button id="menuBtn" class="text-white">
@@ -46,11 +82,11 @@
       <a href="cardapio.html" class="menu-link" data-login="true">Cardápio</a>
       <a href="promocoes.html" class="menu-link" data-login="true">Promoções</a>
       <a href="#contato" class="menu-link" data-login="false">Contato</a>
-      <a href="login.html" class="px-4 py-2 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Login</a>
+      
+      <button id="open-modal-btn-mobile" class="px-4 py-2 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Login</button>
     </div>
   </header>
 
-  <!-- Carousel -->
   <section id="carousel" class="h-screen flex items-center justify-center relative pt-32">
     <div id="carouselContainer" class="w-full max-w-6xl relative overflow-hidden rounded-xl shadow-lg">
       <div class="carousel-item active relative">
@@ -81,13 +117,11 @@
           <p class="text-xl">Experimente nosso açaí especial e sinta a diferença.</p>
         </div>
       </div>
-      <!-- Controles -->
       <button id="prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-yellow-400/70 text-purple-800 p-2 rounded-full hover:bg-yellow-300 transition">❮</button>
       <button id="next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-yellow-400/70 text-purple-800 p-2 rounded-full hover:bg-yellow-300 transition">❯</button>
     </div>
   </section>
 
-  <!-- iFood / Informações -->
   <section class="py-16 px-6 max-w-4xl mx-auto text-center">
     <h3 class="text-3xl font-bold mb-6">Peça no iFood</h3>
     <a href="https://www.ifood.com.br/" target="_blank" class="px-8 py-3 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Peça Agora</a>
@@ -107,7 +141,6 @@
     </div>
   </section>
 
-  <!-- Avaliações -->
   <section class="py-16 px-6 max-w-5xl mx-auto text-center">
     <h3 class="text-3xl font-bold mb-10">O que nossos clientes dizem</h3>
     <div class="grid md:grid-cols-3 gap-6">
@@ -123,7 +156,6 @@
     </div>
   </section>
 
-  <!-- Contato -->
   <section id="contato" class="py-16 px-6 max-w-3xl mx-auto text-center bg-white/20 rounded-2xl my-16">
     <h3 class="text-3xl font-bold mb-6 text-purple-900">Fale Conosco</h3>
     <p class="text-purple-900">Telefone: (67) 9846-3855</p>
@@ -132,19 +164,106 @@
     <img src="https://i.ibb.co/m51D1T2C/images.jpg" alt="Imagem decorativa contato" class="w-full h-96 object-cover rounded-lg mt-8">
   </section>
 
+  <div id="login-modal-backdrop" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-80 transition-opacity duration-300 opacity-0 pointer-events-none">
+    
+    <div id="login-modal-content" class="main-container bg-gray-900 w-full max-w-sm md:max-w-4xl rounded-3xl overflow-hidden flex flex-col md:flex-row h-auto modal-content-mobile mx-4 relative transform translate-y-10 transition-all duration-300">
+      
+      <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-acai-verde z-10 p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div id="banner-section" class="hidden md:flex md:w-1/2 flex-col justify-center items-center p-8 bg-acai-roxo text-white text-center transition-all duration-700 ease-in-out">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">
+          Sabor e Energia!
+        </h2>
+        <p class="text-xl mb-6">
+          Entre para pedir o seu Açaí preferido.
+        </p>
+        <img src="https://i.ibb.co/Zz778TGK/1000254363-removebg-preview.png" alt="Logo Rodrigues Açaí" class="shadow-2xl mt-4 w-40 h-40 object-cover">
+        <div id="banner-text" class="mt-8">
+          </div>
+      </div>
+
+      <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-gray-900 text-white">
+
+        <div class="flex justify-center mb-10 bg-gray-800 p-2 rounded-full">
+          <button id="show-login-btn" class="toggle-btn active flex-1">Login</button>
+          <button id="show-signup-btn" class="toggle-btn flex-1">Cadastro</button>
+        </div>
+
+        <h1 class="text-3xl font-bold text-center text-acai-verde mb-2">Rodrigues Açaí</h1>
+        <p id="form-subtitle" class="text-center text-gray-400 mb-8">Entre na sua conta para continuar.</p>
+
+        <div id="google-section">
+          <button id="google-login-btn" class="flex items-center justify-center w-full bg-white hover:bg-gray-100 text-gray-900 font-bold py-3 rounded-xl transition duration-300 ease-in-out transform hover:scale-[1.01] mb-4 border border-gray-300">
+            <img src="https://e7.pngegg.com/pngimages/114/607/png-clipart-g-suite-pearl-river-middle-school-google-software-suite-email-sign-up-button-text-logo.png" alt="Google Logo" class="w-5 h-5 mr-3">
+            Entrar com Google
+          </button>
+          <div class="flex items-center justify-center mb-6">
+            <div class="w-full border-t border-gray-700"></div>
+            <p class="mx-4 text-gray-500 text-sm">ou</p>
+            <div class="w-full border-t border-gray-700"></div>
+          </div>
+        </div>
+
+        <form id="login-form" class="space-y-6 animate-fadeInUp">
+          <div>
+            <label for="login-email" class="block text-sm font-medium text-gray-300">Email</label>
+            <input type="email" id="login-email" class="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-acai-roxo focus:border-acai-roxo text-white transition duration-200" placeholder="seu.email@exemplo.com" required>
+          </div>
+          <div>
+            <label for="login-password" class="block text-sm font-medium text-gray-300">Senha</label>
+            <input type="password" id="login-password" class="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-acai-roxo focus:border-acai-roxo text-white transition duration-200" placeholder="••••••••" required>
+            <div class="text-right mt-2">
+              <a href="#" class="text-sm text-acai-verde hover:text-acai-claro">Esqueceu a senha?</a>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full bg-acai-claro hover:bg-acai-roxo text-white font-bold py-3 rounded-xl transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-lg shadow-acai-roxo/50">
+            Entrar na Conta
+          </button>
+        </form>
+
+        <form id="signup-form" class="space-y-6 hidden">
+          <div>
+            <label for="signup-name" class="block text-sm font-medium text-gray-300">Nome Completo</label>
+            <input type="text" id="signup-name" class="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-acai-roxo focus:border-acai-roxo text-white transition duration-200" placeholder="Nome Sobrenome" required>
+          </div>
+          <div>
+            <label for="signup-email" class="block text-sm font-medium text-gray-300">Email</label>
+            <input type="email" id="signup-email" class="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-acai-roxo focus:border-acai-roxo text-white transition duration-200" placeholder="seu.email@exemplo.com" required>
+          </div>
+          <div>
+            <label for="signup-password" class="block text-sm font-medium text-gray-300">Criar Senha</label>
+            <input type="password" id="signup-password" class="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-acai-roxo focus:border-acai-roxo text-white transition duration-200" placeholder="Mínimo 6 caracteres" required>
+          </div>
+
+          <button type="submit" class="w-full bg-acai-verde hover:bg-green-500 text-gray-900 font-bold py-3 rounded-xl transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-lg shadow-acai-verde/50">
+            Criar Minha Conta
+          </button>
+        </form>
+
+        <div id="message-box" class="mt-6 p-4 rounded-xl text-center hidden"></div>
+      </div>
+
+    </div>
+  </div>
+  
   <script>
     // Menu Mobile
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
 
-    // Redirecionamento links protegidos
-    const isLogged = false; // Alterar para true quando houver login real
+    // Redirecionamento links protegidos (mantido, mas agora o login é um modal)
+    const isLogged = false; // Alterar para true quando houver login real (usando Firebase Auth)
     document.querySelectorAll('.menu-link').forEach(link=>{
       link.addEventListener('click', e=>{
         if(link.dataset.login === "true" && !isLogged){
           e.preventDefault();
-          window.location.href = 'login.html';
+          
+          // Abre o modal em vez de redirecionar para login.html
+          showModal(); 
         }
       });
     });
@@ -170,6 +289,231 @@
       current = (current + 1) % items.length;
       showItem(current);
     }, 5000);
+  </script>
+
+  <script type="module">
+    // Importa as funções necessárias do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    // SUA CONFIGURAÇÃO DO FIREBASE (MANTIDA)
+    const firebaseConfig = {
+        apiKey: "AIzaSyDs8qrwvopw8pShCYvOepgA3yjFHfMWBrM",
+        authDomain: "rodrigues-d6566.firebaseapp.com",
+        projectId: "rodrigues-d6566",
+        storageBucket: "rodrigues-d6566.firebasestorage.app",
+        messagingSenderId: "1010835711502",
+        appId: "1:1010835711502:web:794d59b10eb64f67d6be5f"
+    };
+
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+
+    // Mapeamento de elementos do DOM
+    const modalBackdrop = document.getElementById('login-modal-backdrop');
+    const modalContent = document.getElementById('login-modal-content');
+    const openModalBtn = document.getElementById('open-modal-btn'); 
+    const openModalBtnMobile = document.getElementById('open-modal-btn-mobile'); 
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showLoginBtn = document.getElementById('show-login-btn');
+    const showSignupBtn = document.getElementById('show-signup-btn');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const bannerSection = document.getElementById('banner-section');
+    const bannerText = document.getElementById('banner-text');
+    const messageBox = document.getElementById('message-box');
+    const googleLoginBtn = document.getElementById('google-login-btn');
+    const googleSection = document.getElementById('google-section'); 
+
+    // --- Lógica do Modal ---
+
+    function showModal() {
+        modalBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+        modalBackdrop.classList.add('opacity-100');
+        
+        modalContent.classList.remove('translate-y-10', 'opacity-0');
+        modalContent.classList.add('translate-y-0', 'opacity-100', 'animate-scaleIn');
+        
+        document.body.style.overflow = 'hidden'; 
+        toggleForm('login'); 
+    }
+
+    function hideModal() {
+        modalBackdrop.classList.remove('opacity-100');
+        modalBackdrop.classList.add('opacity-0', 'pointer-events-none');
+        
+        modalContent.classList.remove('translate-y-0', 'opacity-100');
+        modalContent.classList.add('translate-y-10', 'opacity-0');
+        
+        document.body.style.overflow = ''; 
+    }
+    
+    // --- Lógica de Boas-Vindas e Redirecionamento ---
+    
+    function handleAuthSuccess(user) {
+        const name = user.displayName || user.email.split('@')[0];
+        
+        showFeedbackMessage(`Login de ${name} realizado! Redirecionando...`, 'success');
+
+        // Redireciona para a página de sucesso após o login
+        setTimeout(() => {
+            window.location.href = 'cadastro-completo.html?name=' + encodeURIComponent(name);
+        }, 1500);
+    }
+
+    // --- Funções de UI (Alternância) ---
+
+    function toggleForm(formToShow) {
+        loginForm.classList.add('hidden');
+        signupForm.classList.add('hidden');
+        googleSection.classList.add('hidden');
+
+        showLoginBtn.classList.remove('active');
+        showSignupBtn.classList.remove('active');
+
+        if (formToShow === 'login') {
+            loginForm.classList.remove('hidden');
+            googleSection.classList.remove('hidden'); 
+            showLoginBtn.classList.add('active');
+            formSubtitle.textContent = 'Entre na sua conta para continuar.';
+            updateBannerContent('login');
+        } else { // 'signup'
+            signupForm.classList.remove('hidden');
+            showSignupBtn.classList.add('active');
+            formSubtitle.textContent = 'Crie sua conta em segundos e peça agora!';
+            updateBannerContent('signup');
+        }
+
+        document.getElementById(formToShow + '-form').classList.remove('hidden');
+        document.getElementById(formToShow + '-form').classList.add('animate-fadeInUp');
+        
+        messageBox.classList.add('hidden');
+        messageBox.textContent = '';
+    }
+
+    function updateBannerContent(mode) {
+         bannerSection.classList.remove('bg-acai-roxo', 'bg-acai-claro');
+
+        if (mode === 'login') {
+            bannerSection.classList.add('bg-acai-roxo');
+            // O onclick AGORA FUNCIONA pois a função é global (linha 390)
+            bannerText.innerHTML = `
+                <h3 class="text-2xl font-semibold">Novo por aqui?</h3>
+                <p class="mt-2">Junte-se a nós e comece a saborear!</p>
+                <button onclick="toggleForm('signup')" class="mt-4 bg-acai-verde text-gray-900 font-bold py-2 px-6 rounded-full hover:bg-green-500 transition duration-300">
+                    Ir para Cadastro
+                </button>
+            `;
+        } else { // signup
+            bannerSection.classList.add('bg-acai-claro');
+            // O onclick AGORA FUNCIONA pois a função é global (linha 390)
+            bannerText.innerHTML = `
+                <h3 class="text-2xl font-semibold">Já é cliente?</h3>
+                <p class="mt-2">Que bom ter você de volta! Faça seu login.</p>
+                <button onclick="toggleForm('login')" class="mt-4 bg-acai-roxo text-white font-bold py-2 px-6 rounded-full hover:bg-acai-roxo/80 transition duration-300 border border-white">
+                    Ir para Login
+                </button>
+            `;
+        }
+    }
+
+    function showFeedbackMessage(message, type = 'success') {
+        messageBox.textContent = message;
+        messageBox.classList.remove('hidden', 'bg-red-600', 'bg-acai-verde', 'text-white', 'text-gray-900');
+
+        if (type === 'success') {
+            messageBox.classList.add('bg-acai-verde', 'text-gray-900');
+        } else {
+            messageBox.classList.add('bg-red-600', 'text-white');
+        }
+        messageBox.classList.remove('hidden');
+    }
+
+    // --- Lógica de Eventos ---
+    
+    // Abrir/Fechar o Modal
+    if (openModalBtn) { openModalBtn.addEventListener('click', showModal); }
+    if (openModalBtnMobile) { openModalBtnMobile.addEventListener('click', () => { showModal(); mobileMenu.classList.add('hidden'); }); } // Fecha o menu mobile ao abrir o modal
+    closeModalBtn.addEventListener('click', hideModal);
+    modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+            hideModal(); 
+        }
+    });
+    
+    // Botões de alternância
+    showLoginBtn.addEventListener('click', () => toggleForm('login'));
+    showSignupBtn.addEventListener('click', () => toggleForm('signup'));
+
+    // Autenticação Firebase
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            handleAuthSuccess(userCredential.user);
+        } catch (error) {
+            showFeedbackMessage('Erro: E-mail ou senha inválidos. Tente novamente.', 'error');
+            console.error(error);
+        }
+    });
+
+    signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const name = document.getElementById('signup-name').value;
+
+        if (password.length < 6) {
+             showFeedbackMessage('Erro: A senha deve ter no mínimo 6 caracteres.', 'error');
+             return;
+        }
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            handleAuthSuccess({ displayName: name, email: user.email });
+            
+        } catch (error) {
+            let errorMessage = 'Erro ao cadastrar: Ocorreu um erro desconhecido.';
+            if (error.code === 'auth/email-already-in-use') {
+                errorMessage = 'Erro: Este e-mail já está em uso.';
+            } else if (error.code === 'auth/weak-password') {
+                errorMessage = 'Erro: A senha é muito fraca. Mínimo 6 caracteres.';
+            }
+            showFeedbackMessage(errorMessage, 'error');
+            console.error(error);
+        }
+    });
+
+    googleLoginBtn.addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            handleAuthSuccess(result.user);
+        } catch (error) {
+            let errorMessage = 'Erro ao fazer login com o Google.';
+            if (error.code === 'auth/popup-closed-by-user') {
+                 errorMessage = 'O login com o Google foi cancelado.';
+            }
+            showFeedbackMessage(errorMessage, 'error');
+            console.error(error);
+        }
+    });
+    
+    // FIX CRUCIAL: Torna as funções globais para que os eventos 'onclick' do HTML (no banner) e os links protegidos funcionem
+    window.toggleForm = toggleForm;
+    window.updateBannerContent = updateBannerContent;
+    window.showModal = showModal;
+
+    // Inicialização: Esconde o modal na carga da página
+    document.addEventListener('DOMContentLoaded', hideModal);
+    
   </script>
 
 </body>
