@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rodrigues Açaí & Cia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: sans-serif; }
+    .carousel-item { display: none; transition: opacity 1s ease-in-out; }
+    .carousel-item.active { display: block; opacity: 1; }
+    .carousel-item.fade-out { opacity: 0; }
+  </style>
+</head>
+<body class="bg-purple-900 text-white">
+
+  <!-- Navbar -->
+  <header class="fixed w-full bg-white/20 backdrop-blur-md z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center relative">
+      <div class="flex items-center gap-3 relative -top-2">
+        <img src="https://i.ibb.co/Zz778TGK/1000254363-removebg-preview.png" 
+             alt="Logo Rodrigues Açaí" 
+             class="w-24 h-24 object-contain rounded-full shadow-lg">
+        <div class="flex flex-col leading-tight">
+          <span class="text-2xl font-bold">RODRIGUES</span>
+          <span class="text-sm font-thin">Açaí & Cia</span>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-4 text-white font-semibold">
+        <a href="#carousel" class="menu-link" data-login="false">Home</a>
+        <a href="cardapio.html" class="menu-link" data-login="true">Cardápio</a>
+        <a href="promocoes.html" class="menu-link" data-login="true">Promoções</a>
+        <a href="#contato" class="menu-link" data-login="false">Contato</a>
+        <a href="login.html" class="px-4 py-2 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Login</a>
+      </nav>
+      <div class="md:hidden">
+        <button id="menuBtn" class="text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden bg-white/10 backdrop-blur-md px-6 py-4 flex flex-col gap-4 text-white">
+      <a href="#carousel" class="menu-link" data-login="false">Home</a>
+      <a href="cardapio.html" class="menu-link" data-login="true">Cardápio</a>
+      <a href="promocoes.html" class="menu-link" data-login="true">Promoções</a>
+      <a href="#contato" class="menu-link" data-login="false">Contato</a>
+      <a href="login.html" class="px-4 py-2 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Login</a>
+    </div>
+  </header>
+
+  <!-- Carousel -->
+  <section id="carousel" class="h-screen flex items-center justify-center relative pt-32">
+    <div id="carouselContainer" class="w-full max-w-6xl relative overflow-hidden rounded-xl shadow-lg">
+      <div class="carousel-item active relative">
+        <img src="https://i.ibb.co/8nPK7ybw/unnamed.webp" class="w-full h-screen object-cover" alt="Açaí Tradicional">
+        <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-6">
+          <h2 class="text-5xl font-bold mb-4">O sabor que conquista 🍨</h2>
+          <p class="text-xl">A cada colher, uma explosão de sabor e frescor!</p>
+        </div>
+      </div>
+      <div class="carousel-item relative">
+        <img src="https://i.ibb.co/TDSCCznK/2025-04-03.webp" class="w-full h-screen object-cover" alt="Açaí Premium">
+        <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-6">
+          <h2 class="text-5xl font-bold mb-4">Saúde e energia para você 🌟</h2>
+          <p class="text-xl">Ingredientes frescos e naturais em cada tigela.</p>
+        </div>
+      </div>
+      <div class="carousel-item relative">
+        <img src="https://i.ibb.co/CsvphpCS/2023-05-06.webp" class="w-full h-screen object-cover" alt="Açaí Família">
+        <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-6">
+          <h2 class="text-5xl font-bold mb-4">Compartilhe momentos em família 💜</h2>
+          <p class="text-xl">Açaí delicioso para todos aproveitarem juntos.</p>
+        </div>
+      </div>
+      <div class="carousel-item relative">
+        <img src="https://i.ibb.co/JwJZ7c7v/2023-05-06-1.jpg" class="w-full h-screen object-cover" alt="Açaí Especial">
+        <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-6">
+          <h2 class="text-5xl font-bold mb-4">O sabor que você nunca esquece 😋</h2>
+          <p class="text-xl">Experimente nosso açaí especial e sinta a diferença.</p>
+        </div>
+      </div>
+      <!-- Controles -->
+      <button id="prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-yellow-400/70 text-purple-800 p-2 rounded-full hover:bg-yellow-300 transition">❮</button>
+      <button id="next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-yellow-400/70 text-purple-800 p-2 rounded-full hover:bg-yellow-300 transition">❯</button>
+    </div>
+  </section>
+
+  <!-- iFood / Informações -->
+  <section class="py-16 px-6 max-w-4xl mx-auto text-center">
+    <h3 class="text-3xl font-bold mb-6">Peça no iFood</h3>
+    <a href="https://www.ifood.com.br/" target="_blank" class="px-8 py-3 bg-yellow-400 text-purple-800 rounded-lg font-semibold hover:bg-yellow-300 transition">Peça Agora</a>
+    <div class="mt-10 grid md:grid-cols-3 gap-6">
+      <div class="bg-white/20 p-6 rounded-xl shadow-lg">
+        <h4 class="font-bold mb-2">Horário de funcionamento</h4>
+        <p>Seg-Sex: 08:00 - 22:00<br>Sáb-Dom: 09:00 - 20:00</p>
+      </div>
+      <div class="bg-white/20 p-6 rounded-xl shadow-lg">
+        <h4 class="font-bold mb-2">Delivery</h4>
+        <p>Entregamos na sua casa com rapidez e segurança.</p>
+      </div>
+      <div class="bg-white/20 p-6 rounded-xl shadow-lg">
+        <h4 class="font-bold mb-2">Pagamento</h4>
+        <p>Cartão, Pix ou dinheiro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Avaliações -->
+  <section class="py-16 px-6 max-w-5xl mx-auto text-center">
+    <h3 class="text-3xl font-bold mb-10">O que nossos clientes dizem</h3>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white/20 p-6 rounded-xl shadow-lg">
+        <p>"O melhor açaí que já provei! Sempre fresco e delicioso." – Ana C.</p>
+      </div>
+      <div class="bg-white/20 p-6 rounded-xl shadow-lg">
+        <p>"Entrega rápida e atendimento impecável. Recomendo!" – João M.</p>
+      </div>
+      <div class="bg-white/20 p-6 rounded-xl shadow-lg">
+        <p>"A família inteira ama o Rodrigues Açaí, sabores incríveis!" – Carla P.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato -->
+  <section id="contato" class="py-16 px-6 max-w-3xl mx-auto text-center bg-white/20 rounded-2xl my-16">
+    <h3 class="text-3xl font-bold mb-6 text-purple-900">Fale Conosco</h3>
+    <p class="text-purple-900">Telefone: (67) 9846-3855</p>
+    <p class="text-purple-900">Email: rodrigues.acaiecia@gmail.com</p>
+    <p class="text-purple-900">Endereço: Rua West Point, 370 - Jardim Veraneio, Campo Grande - MS</p>
+    <img src="https://i.ibb.co/m51D1T2C/images.jpg" alt="Imagem decorativa contato" class="w-full h-96 object-cover rounded-lg mt-8">
+  </section>
+
+  <script>
+    // Menu Mobile
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+
+    // Redirecionamento links protegidos
+    const isLogged = false; // Alterar para true quando houver login real
+    document.querySelectorAll('.menu-link').forEach(link=>{
+      link.addEventListener('click', e=>{
+        if(link.dataset.login === "true" && !isLogged){
+          e.preventDefault();
+          window.location.href = 'login.html';
+        }
+      });
+    });
+
+    // Carousel
+    const items = document.querySelectorAll('.carousel-item');
+    let current = 0;
+    const showItem = index => {
+      items.forEach((item,i)=> item.classList.remove('active'));
+      items[index].classList.add('active');
+    }
+
+    document.getElementById('prev').addEventListener('click', ()=>{
+      current = (current - 1 + items.length) % items.length;
+      showItem(current);
+    });
+    document.getElementById('next').addEventListener('click', ()=>{
+      current = (current + 1) % items.length;
+      showItem(current);
+    });
+
+    setInterval(()=>{
+      current = (current + 1) % items.length;
+      showItem(current);
+    }, 5000);
+  </script>
+
+</body>
+</html>

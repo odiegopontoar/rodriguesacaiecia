@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmação - Rodrigues Açaí e Cia</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdJHhFQMhgDC_Q4BXHC4E8HAIne1H7k3A",
+  authDomain: "rodriguesacaiecia-165b9.firebaseapp.com",
+  projectId: "rodriguesacaiecia-165b9",
+  storageBucket: "rodriguesacaiecia-165b9.firebasestorage.app",
+  messagingSenderId: "566761430402",
+  appId: "1:566761430402:web:a0b8083caa23b4f0ad439b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.confirmarCodigo = async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const email = urlParams.get('email');
+  const codigoInput = document.getElementById('codigo').value;
+
+  const docSnap = await getDoc(doc(db,"codigos",email));
+  if(docSnap.exists()){
+    const data = docSnap.data();
+    if(data.codigo === codigoInput){
+      window.location.href = "cadastro-completo.html";
+    } else {
+      alert("Código inválido!");
+    }
+  } else {
+    alert("Nenhum código encontrado para este email!");
+  }
+};
+</script>
+<style>
+body{display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#ff8a00,#e52e71);font-family:Arial,sans-serif;}
+.container{background:#fff;padding:40px;border-radius:16px;width:100%;max-width:400px;text-align:center;box-shadow:0 8px 25px rgba(0,0,0,0.2);}
+input{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:1px solid #ccc;font-size:16px;}
+button{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;margin-top:10px;cursor:pointer;background:#6b2c91;color:#fff;transition:0.3s;}
+button:hover{background:#7e3cb0;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Digite o código recebido por email</h1>
+<input type="text" id="codigo" placeholder="Código">
+<button onclick="confirmarCodigo()">Confirmar</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endereço - Rodrigues Açaí</title>
+<style>
+body { margin:0; font-family: Arial, sans-serif; background:#4B0082; display:flex; justify-content:center; align-items:center; height:100vh; }
+.card { background:white; padding:30px; border-radius:12px; width:90%; max-width:400px; text-align:center; }
+input { width:80%; padding:10px; margin:10px 0; border-radius:6px; border:1px solid #ccc; }
+button { background:#00ff88; border:none; padding:12px 24px; border-radius:8px; font-weight:bold; cursor:pointer; transition:.3s; }
+button:hover { background:#ff00aa; }
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Digite seu endereço</h2>
+<input type="text" id="endereco" placeholder="Rua, Número, Bairro">
+<button onclick="salvarEndereco()">Confirmar</button>
+<p id="status"></p>
+</div>
+<script>
+function salvarEndereco(){
+  const endereco = document.getElementById('endereco').value.trim();
+  if(!endereco){ document.getElementById('status').textContent = "Digite um endereço válido"; return; }
+  localStorage.setItem('enderecoCliente', endereco);
+  document.getElementById('status').textContent = `Endereço salvo: ${endereco}`;
+}
+</script>
+</body>
+</html>

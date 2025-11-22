@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro Completo - Rodrigues Açaí e Cia</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdJHhFQMhgDC_Q4BXHC4E8HAIne1H7k3A",
+  authDomain: "rodriguesacaiecia-165b9.firebaseapp.com",
+  projectId: "rodriguesacaiecia-165b9",
+  storageBucket: "rodriguesacaiecia-165b9.firebasestorage.app",
+  messagingSenderId: "566761430402",
+  appId: "1:566761430402:web:a0b8083caa23b4f0ad439b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.finalizarCadastro = async () => {
+  const nome = document.getElementById('nome').value;
+  const endereco = document.getElementById('endereco').value;
+  const telefone = document.getElementById('telefone').value;
+  const nascimento = document.getElementById('nascimento').value;
+  const cpf = document.getElementById('cpf').value;
+
+  const user = auth.currentUser;
+  if(!user) return alert("Usuário não autenticado.");
+
+  await setDoc(doc(db,"usuarios",user.uid), {
+    nome, endereco, telefone, nascimento, cpf
+  });
+
+  alert("Cadastro completo finalizado!");
+  window.location.href = "index.html";
+};
+</script>
+<style>
+body{display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#ff8a00,#e52e71);font-family:Arial,sans-serif;}
+.container{background:#fff;padding:40px;border-radius:16px;width:100%;max-width:500px;text-align:center;box-shadow:0 8px 25px rgba(0,0,0,0.2);}
+input{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:1px solid #ccc;font-size:16px;}
+button{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;margin-top:10px;cursor:pointer;background:#6b2c91;color:#fff;transition:0.3s;}
+button:hover{background:#7e3cb0;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Cadastro Completo</h1>
+<input type="text" id="nome" placeholder="Nome completo" required>
+<input type="text" id="endereco" placeholder="Endereço" required>
+<input type="text" id="telefone" placeholder="Telefone" required>
+<input type="date" id="nascimento" placeholder="Data de nascimento (opcional)">
+<input type="text" id="cpf" placeholder="CPF/CNPJ (opcional)">
+<button onclick="finalizarCadastro()">Finalizar Cadastro</button>
+</div>
+</body>
+</html>
