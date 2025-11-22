@@ -6,7 +6,7 @@
 <title>Login / Cadastro - Rodrigues Açaí e Cia</title>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
 // Firebase Config
@@ -29,7 +29,17 @@ window.loginGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    window.location.href = "cadastro-completo.html"; // Google sempre vai para cadastro completo
+
+    // Salvar usuário no Firestore
+    await setDoc(doc(db, "usuarios", user.uid), {
+      displayName: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+      timestamp: Date.now()
+    });
+
+    // Redirecionar para a página de cadastro completo
+    window.location.href = "cadastro-completo.html"; 
   } catch (error) {
     alert(`Erro: ${error.message}`);
   }
@@ -52,17 +62,20 @@ window.cadastrarEmail = async () => {
   const email = document.getElementById('cadEmail').value;
   const senha = document.getElementById('cadSenha').value;
   try {
-    await createUserWithEmailAndPassword(auth,email,senha);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+
+    // Enviar o email de verificação
+    await userCredential.user.sendEmailVerification();
 
     // Gerar código de 6 dígitos
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Salvar no Firestore
-    await setDoc(doc(db,"codigos",email),{codigo, timestamp:Date.now()});
+    // Salvar código no Firestore
+    await setDoc(doc(db, "codigos", email), { codigo, timestamp: Date.now() });
 
     alert(`Código enviado para o email: ${codigo}`); // Simula envio real
     window.location.href = "confirmacao.html?email=" + encodeURIComponent(email);
-  } catch(error){
+  } catch (error) {
     alert(`Erro: ${error.message}`);
   }
 };
